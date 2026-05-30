@@ -1,0 +1,60 @@
+/* Section ခေါင်းစဉ် */
+.section-title {
+    text-align: center;
+    font-size: 22px;
+    color: #be123c;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* Section တစ်ခုလုံးရဲ့ အပြင်အဆင် */
+.video-section {
+    width: 100%;
+    max-width: 1200px; /* ဗီဒီယို ၃ ခု ဘေးတိုက်ပြဖို့အတွက် အကျယ်ကို တိုးပေးထားပါတယ် */
+    margin: 0 auto 25px auto;
+    padding: 0 15px;
+}
+
+/* CSS Grid ကို သုံးပြီး ကတ် ၃ ခုကို Responsive ပြုလုပ်ခြင်း */
+.video-grid {
+    display: grid;
+    /* ကတ်တစ်ခုရဲ့ အနည်းဆုံးအကျယ်ကို 280px ထားပြီး ဆံ့သလောက် ဘေးတိုက် Auto စီခိုင်းတာပါ */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px; /* ကတ်တစ်ခုနဲ့တစ်ခုကြား အကွာအဝေး */
+}
+
+/* ဗီဒီယို ကတ်ပြားတစ်ခုချင်းစီရဲ့ Background နဲ့ ပုံစံ */
+.video-card {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 12px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    border: 1px solid #f8bbd0;
+}
+
+/* ဗီဒီယိုကို ထည့်သွင်းမယ့် ဘောင် (Container) */
+.video-container {
+    position: relative;
+    width: 100%;
+    background-color: #000000;
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9; /* ၁၆:၉ အချိုးအစားအတိုင်း ပုံသေထိန်းထားခြင်း */
+}
+
+/* ဗီဒီယို တကယ်အလုပ်လုပ်မယ့် အရွယ်အစား */
+.video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ဗီဒီယိုအောက်က စာသားအလှဆင်ခြင်း */
+.video-caption {
+    font-size: 14px;
+    color: #6b21a8;
+    margin-top: 10px;
+    font-weight: 500;
+}

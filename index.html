@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, My Love!</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 20px 0;
+        }
+
+        /* Password Screen Styling */
+        #password-screen {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 360px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #d81b60;
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+
+        p.hint {
+            color: #880e4f;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        #password-display {
+            width: 100%;
+            height: 50px;
+            border: 2px solid #f48fb1;
+            border-radius: 10px;
+            font-size: 24px;
+            text-align: center;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            background: #fff;
+            color: #d81b60;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Grid Layout for Numpad */
+        .numpad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background: #fff;
+            border: 2px solid #f8bbd0;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #c2185b;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn:active {
+            background: #f8bbd0;
+            transform: scale(0.95);
+        }
+
+        .btn.clear {
+            background: #ffebee;
+            border-color: #ffcdd2;
+            color: #c62828;
+        }
+
+        /* Submit Button centered below */
+        .submit-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .btn.submit {
+            background: #e11d48;
+            border-color: #e11d48;
+            color: #fff;
+            width: 80%;
+            padding: 12px;
+            font-size: 18px;
+        }
+
+        .btn.submit:active {
+            background: #be123c;
+        }
+
+        #error-msg {
+            color: #d32f2f;
+            font-size: 14px;
+            margin-top: 10px;
+            height: 20px;
+            font-weight: 500;
+        }
+
+        /* Wish Screen Styling */
+        #wish-screen {
+            display: none;
+            width: 95%;
+            max-width: 600px;
+            text-align: center;
+            animation: fadeIn 1s ease forwards;
+            position: relative;
+            z-index: 10;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Card Component Styling */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px 20px;
+            border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .main-title {
+            font-size: 26px;
+            color: #ec4899;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .wish-text {
+            font-size: 16px;
+            color: #4c1d95;
+            line-height: 1.8;
+            text-align: justify;
+            white-space: pre-line;
+        }
+
+        /* Section Heading inside wish screen */
+        .section-title {
+            font-size: 22px;
+            color: #be123c;
+            margin: 15px 0;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* NEW: Carousel/Slider Styling */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            margin-top: 10px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .carousel-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            color: #fff;
+            padding: 15px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.7);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            color: #be123c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .carousel-btn.prev {
+            left: 10px;
+        }
+
+        .carousel-btn.next {
+            right: 10px;
+        }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 55px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 2;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background: #fff;
+            transform: scale(1.2);
+        }
+
+        /* Photo Grid Layout */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .photo-card {
+            background: #fff;
+            padding: 8px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transform: rotate(2deg);
+            transition: transform 0.3s;
+        }
+
+        .photo-card:nth-child(even) {
+            transform: rotate(-2deg);
+        }
+
+        .photo-card:hover {
+            transform: rotate(0deg) scale(1.05);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .photo-caption {
+            font-size: 13px;
+            color: #6b21a8;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        /* Future Timeline Layout */
+        .future-item {
+            background: #fff5f7;
+            border-left: 4px solid #f43f5e;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 0 15px 15px 0;
+            text-align: left;
+        }
+
+        .future-item h4 {
+            color: #e11d48;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .future-item p {
+            color: #6b21a8;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .heart-icon {
+            font-size: 40px;
+            color: #e11d48;
+            animation: heartbeat 1.2s infinite;
+            margin-top: 10px;
+        }
+
+        @keyframes heartbeat {
+            0% {
+                transform: scale(1);
+            }
+
+            20% {
+                transform: scale(1.15);
+            }
+
+            40% {
+                transform: scale(1);
+            }
+
+            60% {
+                transform: scale(1.15);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Floating Balloons */
+        .balloon {
+            position: absolute;
+            width: 30px;
+            height: 40px;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.6;
+            animation: floatUp 6s linear infinite;
+            bottom: -50px;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translateY(-120vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="password-screen">
+        <h2>စကားဝှက် ရိုက်ထည့်ပါ 🔐</h2>
+        <p class="hint">Hint: ကိုကိုတို့ချစ်သူဖြစ်တဲ့ရက်စွဲ<br>(ဂဏန်း၆လုံးထည့်ပါ)</p>
+        <div id="password-display"></div>
+
+        <div class="numpad">
+            <button class="btn" onclick="press(1)">1</button>
+            <button class="btn" onclick="press(2)">2</button>
+            <button class="btn" onclick="press(3)">3</button>
+            <button class="btn" onclick="press(4)">4</button>
+            <button class="btn" onclick="press(5)">5</button>
+            <button class="btn" onclick="press(6)">6</button>
+            <button class="btn" onclick="press(7)">7</button>
+            <button class="btn" onclick="press(8)">8</button>
+            <button class="btn" onclick="press(9)">9</button>
+            <button class="btn clear" onclick="clearPass()">C</button>
+            <button class="btn" onclick="press(0)">0</button>
+        </div>
+        <div class="submit-container">
+            <button class="btn submit" onclick="checkPassword()">အတည်ပြုမည်</button>
+        </div>
+        <div id="error-msg"></div>
+    </div>
+
+    <div id="wish-screen">
+
+        <div class="card">
+            <div class="main-title">🎂 Happy Birthday ပါ မီးငယ် 🎉</div>
+            <div class="wish-text">
+                မွေးနေ့မှာ အရာရာအဆင်ပြေပြီး ပျော်ရွှင်ပါစေနော်။ မီးငယ်ဖြစ်ချင်တဲ့ ဆန္ဒတွေအကုန်လုံး ပြည့်ဝပါစေ။
+
+                ပြီးခဲ့တဲ့ရက်ပိုင်းက ကိုကို့ ရဲ့စိုးရိမ်စိတ်တွေ၊ သံသယတွေကြောင့် မီးငယ်ကို စိတ်ရှုပ်အောင်၊
+                စိတ်အနှောင့်အယှက်ဖြစ်အောင် လုပ်မိခဲ့တာတွေအတွက် တကယ်ကို စိတ်မကောင်းပါဘူး။ ကိုကို့ ကိုခွင့်လွှတ်ပါနော်။
+
+                ကိုကို့ရဲ့ မကောင်းတဲ့ အကျင့်ကိုလည်း ပြင်ပါ့မယ်"
+
+                ကိုကို့ ဘက်က မီးငယ်အပေါ်ထားတဲ့ မေတ္တာ၊ သံယောဇဉ် တွေက ဘယ်တော့မှ ပြောင်းလဲသွားမှာမဟုတ်သလို
+                ဘယ်တော့မှလည်း ပြတ်မှာမဟုတ်ပါဘူး။ မီးငယ် ကို အရမ်းချစ်တယ်နော်။ စိတ်အေးအေးထားပြီး မွေးနေ့ရက်လေးမှာ
+                စိတ်ချမ်းသာကိုယ်ကျန်းမာနဲ့ ပျော်ရွှင်စွာ ဖြတ်သန်းပါ မီးငယ်။အများကြီးချစ်တယ်နော် 💕
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title">✨ Our Sweet Moments 💕</div>
+            <div class="carousel-container">
+                <div class="carousel-track" id="carouselTrack">
+                    <div class="carousel-slide">
+                        <img src="./img/1.jpg" alt="Slide 1"
+                            onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600'">
+                        <div class="carousel-caption"></div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="img/2.jpg" alt="Slide 2"
+                            onerror="this.src='https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600'">
+                        <div class="carousel-caption"></div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="img/3.jpg" alt="Slide 3"
+                            onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600'">
+                        <div class="carousel-caption"></div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="img/4.jpg" alt="Slide 3"
+                            onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600'">
+                        <div class="carousel-caption"></div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="img/5.jpg" alt="Slide 3"
+                            onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600'">
+                        <div class="carousel-caption"></div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="img/6.jpg" alt="Slide 3"
+                            onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600'">
+                        <div class="carousel-caption"></div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="img/7.jpg" alt="Slide 3"
+                            onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600'">
+                        <div class="carousel-caption"></div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="img/8.jpg" alt="Slide 3"
+                            onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600'">
+                        <div class="carousel-caption"></div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="img/9.jpg" alt="Slide 3"
+                            onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600'">
+                        <div class="carousel-caption"></div>
+                    </div>
+                </div>
+                <button class="carousel-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+                <button class="carousel-btn next" onclick="moveSlide(1)">&#10095;</button>
+                <div class="carousel-dots" id="carouselDots">
+                    <span class="dot active" onclick="currentSlide(0)"></span>
+                    <span class="dot" onclick="currentSlide(1)"></span>
+                    <span class="dot" onclick="currentSlide(2)"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title">📸 Our Memory Photos 💖</div>
+            <div class="photo-grid">
+                <div class="photo-card">
+                    <img src="img/1.jpg" alt="Memory 1"
+                        onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500'">
+                    <div class="photo-caption">အချစ်ဆုံးလေးရဲ့ အပြုံး 😍</div>
+                </div>
+                <div class="photo-card">
+                    <img src="img/2.jpg" alt="Memory 2"
+                        onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500'">
+                    <div class="photo-caption">အချစ်ဆုံးလေးရဲ့ အပြုံး 😍</div>
+                </div>
+                <div class="photo-card">
+                    <img src="img/3.jpg" alt="Memory 3"
+                        onerror="this.src='https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500'">
+                    <div class="photo-caption">အတူတူ ဖြတ်သန်းခဲ့ကြတယ် 👩‍❤️‍👨</div>
+                </div>
+                <div class="photo-card">
+                    <img src="img/4.jpg" alt="Memory 4"
+                        onerror="this.src='https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=500'">
+                    <div class="photo-caption">ချစ်ဖို့ကောင်းနေသော🌹</div>
+                </div>
+                <div class="photo-card">
+                    <img src="img/5.jpg" alt="Memory 3"
+                        onerror="this.src='https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500'">
+                    <div class="photo-caption">ဘုရာတရားလည်းလုပ်သောချစ်သူ👩‍❤️‍👨</div>
+                </div>
+                <div class="photo-card">
+                    <img src="img/6.jpg" alt="Memory 4"
+                        onerror="this.src='https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=500'">
+                    <div class="photo-caption">ဘယ်ချိန်ကြည့်ကြည့် ရိုးအီမသွားသောချစ်ခြင်းနဲ့ 🌹</div>
+                </div>
+                <div class="photo-card">
+                    <img src="img/7.jpg" alt="Memory 3"
+                        onerror="this.src='https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500'">
+                    <div class="photo-caption">ပေါတောတောနေတတ်သေး👩‍❤️‍👨</div>
+                </div>
+                <div class="photo-card">
+                    <img src="img/8.jpg" alt="Memory 4"
+                        onerror="this.src='https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=500'">
+                    <div class="photo-caption">လှလားဟင်🌹</div>
+                </div>
+                <div class="photo-card">
+                    <img src="img/9.jpg" alt="Memory 3"
+                        onerror="this.src='https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500'">
+                    <div class="photo-caption">အိပ်ယာထဲလည်းရိုက်မှာပဲ👩‍❤️‍👨</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title">✨ Our Future 👩‍❤️‍💋‍👨</div>
+
+            <div class="future-item">
+                <h4>🤝 ဘဝခရီးကို အတူတူ လျှောက်လှမ်းမယ်</h4>
+                <p>၅ နှစ်ကျော် လက်တွဲလာခဲ့သလို ရှေ့ဆက်မယ့် အနာဂတ်တွေမှာလည်း ဘယ်လိုအခက်အခဲမျိုးပဲ ကြုံလာပါစေ မီးငယ်လက်ကို
+                    တင်းတင်းကြပ်ကြပ် ဆုပ်ကိုင်ထားမှာပါ။</p>
+            </div>
+
+            <div class="future-item">
+                <h4>💪 ပိုမိုအောင်မြင်တဲ့ ဘဝတစ်ခု တည်ဆောက်မယ်</h4>
+                <p>မီးငယ်ဖြစ်စေချင်တဲ့အတိုင်း ဘဝမှာ တိုးတက်အောင်မြင်တဲ့ ယောကျာ်းတစ်ယောက်ဖြစ်အောင် အစွမ်းကုန်
+                    ကြိုးစားပြီး
+                    မီးငယ်ကို တင်းတောင်းတင့်တယ်ထားနိုင်အောင်ံ ကြိုးစားပေးပါ့မယ်။</p>
+            </div>
+
+            <div class="future-item">
+                <h4>💒 လက်ထပ်ပြီး အိမ်ထောင်တစ်ခု ထူထောင်မယ်</h4>
+                <p>အချိန်တန်လို့ အခြေအနေတွေ အဆင်သင့်ဖြစ်တဲ့အခါ နင့်ကို ဂုဏ်သိက္ခာရှိရှိနဲ့ တစ်သက်လုံး စောင့်ရှောက်မယ့်
+                    ဇနီးမယားအဖြစ် လက်ထပ်ယူပါ့မယ် အချစ်လေး။ အဆဲလေးတော့လျော့ပါ မီးငယ်</p>
+            </div>
+            <section class="video-section">
+                <h3 class="section-title">🎥 Happy Birthday💖</h3>
+
+                <div class="video-grid">
+
+                    <div class="video-card">
+                        <div class="video-container">
+                            <video class="birthday-video" autoplay controls loop playsinline>
+                                <source src="./vid/_Happy_Birthday_(360p).mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <div class="video-caption">Happy Birthday မီးငယ်.</div>
+                    </div>
+
+
+
+
+
+                </div>
+            </section>
+            <div class="heart-icon">❤️</div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentInput = "";
+        const correctPassword = "231020";
+        const display = document.getElementById("password-display");
+        const errorMsg = document.getElementById("error-msg");
+
+        // Carousel variables
+        let slideIndex = 0;
+        let slideInterval;
+
+        function press(num) {
+            if (currentInput.length < 6) {
+                currentInput += num;
+                updateDisplay();
+                errorMsg.innerText = "";
+            }
+        }
+
+        function clearPass() {
+            currentInput = "";
+            updateDisplay();
+            errorMsg.innerText = "";
+        }
+
+        function updateDisplay() {
+            display.innerText = currentInput.replace(/./g, "• ") || " ";
+        }
+
+        function checkPassword() {
+            if (currentInput === correctPassword) {
+                document.getElementById("password-screen").style.display = "none";
+                document.getElementById("wish-screen").style.display = "block";
+                document.body.style.alignItems = "flex-start";
+                startBalloons();
+                startCarousel(); // Start auto sliding
+            } else {
+                errorMsg.innerText = "စကားဝှက် မှားနေပါတယ်၊ ပြန်ကြိုးစားကြည့်ပါ မီးငယ်။";
+                currentInput = "";
+                updateDisplay();
+            }
+        }
+
+        function startBalloons() {
+            const colors = ['#ff85a1', '#ffb3c1', '#ffccd5', '#ff4d6d', '#c9184a'];
+            setInterval(() => {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                balloon.style.left = Math.random() * 100 + 'vw';
+                balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                balloon.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                document.body.appendChild(balloon);
+
+                setTimeout(() => {
+                    balloon.remove();
+                }, 7000);
+            }, 400);
+        }
+
+        // NEW: Carousel Functions
+        function showSlides(index) {
+            const track = document.getElementById("carouselTrack");
+            const slides = document.getElementsByClassName("carousel-slide");
+            const dots = document.getElementsByClassName("dot");
+
+            if (index >= slides.length) { slideIndex = 0; }
+            if (index < 0) { slideIndex = slides.length - 1; }
+
+            track.style.transform = `translateX(-${slideIndex * 100}%)`;
+
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            dots[slideIndex].className += " active";
+        }
+
+        function moveSlide(step) {
+            clearInterval(slideInterval); // Stop auto play temporarily on manual click
+            slideIndex += step;
+            showSlides(slideIndex);
+            startCarousel(); // Restart auto play
+        }
+
+        function currentSlide(index) {
+            clearInterval(slideInterval);
+            slideIndex = index;
+            showSlides(slideIndex);
+            startCarousel();
+        }
+
+        function startCarousel() {
+            slideInterval = setInterval(() => {
+                slideIndex++;
+                showSlides(slideIndex);
+            }, 3000); // 3 seconds interval
+        }
+    </script>
+    <script src="./js/javascript.js"></script>
+</body>
+
+</html>
